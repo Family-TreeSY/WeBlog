@@ -1,0 +1,100 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+      <!-- Bootstrap CSS -->
+      <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"><link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
+      <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css">
+      <link rel="stylesheet" href="{% static 'css/base.css'%}">
+      <style>
+
+      </style>
+      <title>Treehl的博客</title>
+  </head>
+  <body>
+  <header class="fixed-top">
+      <div class="container">
+        <div class="row">
+              <div class="col-8">
+                <nav class="category">
+                    <a class="log" href="/">TypeIdea</a>
+                    <a class="index" href="/">首页</a>
+                    {% for cate in nav_cates %}
+                    <a class="link" href="{% url 'category' cate.id %}">{{ cate.name }}</a>
+                    {% endfor %}
+                </nav>
+              </div>
+              <div class="col-4">
+                  <div class="input-group search">
+                      <input type="text" class="'form-control" placeholder="Search for..." aria-label="Searrch for...">
+                      <span class="input-group-btn">
+                          <button class="btn btn-secondary" type="button">Go</button>
+                      </span>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </header>
+    <!--<div class="container banner">-->
+        <!--<h3>-->
+            <!--WeBlog-->
+            <!--<small class="text-muted"> - 基于Django多人博客系统</small>-->
+        <!--</h3>-->
+    <!--</div>-->
+
+
+    <div class="container main">
+        <div class="row">
+            <div class="col-8 left-side">
+                <div class="inner">
+                {% block content %}
+                {% endblock %}
+                </div>
+            </div>
+            <div class="col-3 right-side">
+                <div class="inner">
+                {% for side in sidebars %}
+                <div class="sidebar">
+                    <div class="sidebar-title">{{ side.title }}</div>
+                    <div class="sidebar-content">
+                        {% if side.display_type == 1 %}
+                            {% autoescape on %}
+                            {{ side.content }}
+                            {% endautoescape %}
+                        {% elif side.display_type == 2 %}
+                        <ul>
+                            {% for post in recently_posts %}
+                            <li><a href="{% url 'detail' post.pk %}">{{ post.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                        {% elif side.display_type == 4 %}
+                        <ul>
+                            {% for comment in recently_comments %}
+                            <li>{{ comment.content }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <footer class="footer">
+        <div class="container">
+            <nav class="nav category">
+                {% for cate in cates %}
+                <a href="{% url 'category' cate.id %}">{{ cate.name }}</a>
+                {% endfor %}
+            </nav>
+        </div>
+        <div class="container by">
+        <span class="text-muted">Power by typeidea@treehl</span>
+        </div>
+    </footer>
