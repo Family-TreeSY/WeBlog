@@ -3,8 +3,9 @@ import os
 import sys
 
 if __name__ == "__main__":
+    profile = os.environ.get('WEBLOG_PROFILE', 'develop')
     os.environ.setdefault(
-        "DJANGO_SETTINGS_MODULE", "weblog.settings")
+        "DJANGO_SETTINGS_MODULE", "weblog.settings.%s" % profile)
     try:
         from django.core.management import execute_from_command_line
     except ImportError:
