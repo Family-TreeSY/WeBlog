@@ -68,7 +68,22 @@ class BasePostsView(CommonMixin, ListView):
 
 
 class IndexView(BasePostsView):
-    pass
+    '''
+        增加搜索功能
+        1.数据过滤
+        2.数据传递到模板里
+        '''
+
+    def get_queryset(self):
+        query = self.request.GET.get('query')
+        qs = super(IndexView, self).get_queryset()
+        if query:
+            qs = qs.filter(title__icontains=query)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        query = self.request.GET.get('query')
+        return super(IndexView, self).get_context_data(query=query)
 
 
 class CategoryView(BasePostsView):
@@ -89,6 +104,17 @@ class TagView(BasePostsView):
 
         posts = tag.posts.all()
         return posts
+
+'''
+作者搜索页面
+'''
+class AuthorView(BasePostsView):
+    def get_queryset(self):
+        author_id = self.kwargs.get('author_id')
+        qs = super(AuthorView, self).get_queryset()
+        if author_id:
+            qs = qs.filter(user_id=author_id)
+        return qs
 
 
 class PostView(CommonMixin, DetailView):

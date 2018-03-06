@@ -73,8 +73,9 @@ class Post(models.Model):
     last_update_time = models.DateTimeField(
         auto_now=True, verbose_name='最后修改时间')
 
-    class Meta:
-        verbose_name = verbose_name_plural = '文章'
-
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name = verbose_name_plural = '文章'
+        ordering = ['-id']

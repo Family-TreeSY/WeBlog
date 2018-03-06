@@ -21,7 +21,7 @@
         <div class="row">
               <div class="col-8">
                 <nav class="category">
-                    <a class="log" href="/">TypeIdea</a>
+                    <a class="log" href="/">WeBlog</a>
                     <a class="index" href="/">首页</a>
                     {% for cate in nav_cates %}
                     <a class="link" href="{% url 'category' cate.id %}">{{ cate.name }}</a>
@@ -29,12 +29,12 @@
                 </nav>
               </div>
               <div class="col-4">
-                  <div class="input-group search">
-                      <input type="text" class="'form-control" placeholder="Search for..." aria-label="Searrch for...">
+                  <form action="\" method="GET" class="input-group search">
+                      <input type="text" name="query" class="'form-control" placeholder="Search for..." aria-label="Searrch for...">
                       <span class="input-group-btn">
-                          <button class="btn btn-secondary" type="button">Go</button>
+                          <input type="submit" class="btn btn-secondary" value="Search"/>
                       </span>
-                  </div>
+                  </form>
               </div>
           </div>
       </div>

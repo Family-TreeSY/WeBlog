@@ -1,4 +1,4 @@
- body {
+          body {
                 background-color: #eeeeee;
           }
           .fixed-top {
@@ -7,7 +7,7 @@
                 left: 0;
           }
           header {
-                height: 50px;
+                height: 60px;
                 background-color: #3d4450;
                 border-color: #080808；
                 line-height: 50px; # 居中
@@ -26,7 +26,7 @@
                 padding-left: 0;
            }
           header a.log:hover {
-                background-color: #3d4450; # typeidea不出现黑色背景
+                background-color: #3d4450; # weblog不出现黑色背景
            }
           header .search {
                 margin-top: 5px;
@@ -63,7 +63,7 @@
                 padding: 1rem;
           }
           .main {
-                margin-top: 80px;
+                margin-top: 120px;
           }
           .main ul {
                 padding-left: 0px;
