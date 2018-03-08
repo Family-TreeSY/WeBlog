@@ -7,6 +7,7 @@ from django.views.generic import ListView, DetailView
 from .models import Post, Category, Tag
 from config.models import SideBar
 from comment.models import Comment
+from comment.forms import CommentForm
 
 
 class CommonMixin(object):
@@ -44,7 +45,7 @@ class CommonMixin(object):
         recently_posts = Post.objects.filter(status=1)[:5]
         recently_comments = Comment.objects.filter(status=1)[:2]
 
-        context = {
+        kwargs.update({
             # 'posts': queryset
             # 'nav_cates': nav_cates,
             # 'cates': cates,
@@ -52,10 +53,10 @@ class CommonMixin(object):
             'recently_posts': recently_posts,
             'recently_comments': recently_comments,
 
-        }
-        context.update(self.get_catgeory_data())
-        context.update(self.get_sidebar_data())
-        return super(CommonMixin, self).get_context_data(**context)
+        })
+        kwargs.update(self.get_catgeory_data())
+        kwargs.update(self.get_sidebar_data())
+        return super(CommonMixin, self).get_context_data(**kwargs)
 
 
 
@@ -122,6 +123,11 @@ class PostView(CommonMixin, DetailView):
     template_name = 'blog/detail.html'
     context_object_name = 'post'
 
+    def get_context_data(self, **kwargs):
+        kwargs.update({
+            'comment_form': CommentForm(),  # initial: 指定表单的初始数据
+        })
+        return super(PostView, self).get_context_data(**kwargs)
 
 
 #
