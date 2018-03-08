@@ -6,6 +6,11 @@ from .models import Comment
 
 
 class CommentForm(forms.ModelForm):
+    content = forms.CharField(
+        label='内容',
+        max_length=500,
+        widget=forms.widgets.Textarea(attrs={'rows': 6, 'cols': 88}))
+
     def clean_content(self):
         content = self.cleaned_data.get('content')
         if len(content) < 10:

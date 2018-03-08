@@ -16,8 +16,8 @@ class Comment(models.Model):
     content = models.CharField(max_length=255, verbose_name='内容')
     created_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
-    def __str__(self):
-        return self.nickname
+    # def __str__(self):
+    #     return self.nickname
 
 
     class Meta:
