@@ -13,7 +13,7 @@ from .adminforms import CommentAdminForm
 @admin.register(Comment, site=custom_site)
 class CommentAdmin(admin.ModelAdmin):
     form = CommentAdminForm
-    list_display = ['target', 'nickname', 'email', 'website', 'created_time', 'operator']
+    list_display = ['target', 'nickname', 'email', 'website', 'content', 'created_time', 'operator']
     # list_filter = ['nickname']
     # search_fields = ['email', 'nickename']
     actions_on_top = True

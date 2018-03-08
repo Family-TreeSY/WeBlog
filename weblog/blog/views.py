@@ -7,7 +7,8 @@ from django.views.generic import ListView, DetailView
 from .models import Post, Category, Tag
 from config.models import SideBar
 from comment.models import Comment
-from comment.forms import CommentForm
+# from comment.forms import CommentForm
+from comment.views import CommentShowMixin
 
 
 class CommonMixin(object):
@@ -118,16 +119,23 @@ class AuthorView(BasePostsView):
         return qs
 
 
-class PostView(CommonMixin, DetailView):
+class PostView(CommonMixin, CommentShowMixin, DetailView):
     model = Post
     template_name = 'blog/detail.html'
     context_object_name = 'post'
 
-    def get_context_data(self, **kwargs):
-        kwargs.update({
-            'comment_form': CommentForm(),  # initial: 指定表单的初始数据
-        })
-        return super(PostView, self).get_context_data(**kwargs)
+
+    # def get_comment(self):
+    #     target = self.request.path
+    #     comments = Comment.objects.filter(target=target)
+    #     return comments
+    #
+    # def get_context_data(self, **kwargs):
+    #     kwargs.update({
+    #         'comment_form': CommentForm(),
+    #         'comment_list': self.get_comment()
+    #     })
+    #     return super(PostView, self).get_context_data(**kwargs)
 
 
 #
