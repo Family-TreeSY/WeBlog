@@ -124,7 +124,7 @@ class PostView(CommonMixin, CommentShowMixin, DetailView):
     template_name = 'blog/detail.html'
     context_object_name = 'post'
 
-
+    #
     # def get_comment(self):
     #     target = self.request.path
     #     comments = Comment.objects.filter(target=target)

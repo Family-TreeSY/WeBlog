@@ -21,6 +21,7 @@ class CommentShowMixin(object):
 
 
 class CommentView(TemplateView):
+
     template_name = 'comment/result.html'
 
     def get(self, request, *args, **kwargs):
@@ -41,6 +42,7 @@ class CommentView(TemplateView):
         context = {
             'succeed': succeed,
             'form': comment_form,
+            # 'target': target,
         }
         return self.render_to_response(context)
 
