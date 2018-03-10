@@ -1,8 +1,7 @@
 # -*- coding:utf-8 -*-
-import markdown
-
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import F
 
 
 class Category(models.Model):
@@ -75,18 +74,26 @@ class Post(models.Model):
     created_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     last_update_time = models.DateTimeField(
         auto_now=True, verbose_name='最后修改时间')
+    pv = models.PositiveIntegerField(verbose_name='pv', default=0)
+    uv = models.PositiveIntegerField(verbose_name='uv', default=0)
 
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-        if self.is_markdown:
-            self.content = markdown.markdown(self.content, extensions=[
-                'markdown.extensions.extra',
-                'markdown.extensions.codehilite',
-                'markdown.extensions.toc',
-            ])
-        return super(Post, self).save(*args, **kwargs)
+    def increase_pv(self):
+        return type(self).objects.filter(id=self.id).update(pv=F('pv') + 1)
+
+    def increase_uv(self):
+        return type(self).objects.filter(id=self.id).update(pv=F('uv') + 1)
+    #
+    # def save(self, *args, **kwargs):
+    #     if self.is_markdown:
+    #         self.content = markdown.markdown(self.content, extensions=[
+    #             'markdown.extensions.extra',
+    #             'markdown.extensions.codehilite',
+    #             'markdown.extensions.toc',
+    #         ])
+    #     return super(Post, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = verbose_name_plural = '文章'

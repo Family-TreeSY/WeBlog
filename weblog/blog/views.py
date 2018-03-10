@@ -1,7 +1,9 @@
 # -*- coding:utf-8 -*-
-from django.shortcuts import render
-from django.http import Http404
-from django.core.paginator import Paginator, EmptyPage
+import markdown
+# from django.shortcuts import render
+# from django.http import Http404
+# from django.core.paginator import Paginator, EmptyPage
+from django.core.cache import cache
 from django.views.generic import ListView, DetailView
 
 from .models import Post, Category, Tag
@@ -43,6 +45,7 @@ class CommonMixin(object):
 
 
     def get_context_data(self, **kwargs):
+        hot_posts = Post.objects.filter(status=1).order_by('-pv')[:5]
         recently_posts = Post.objects.filter(status=1)[:5]
         recently_comments = Comment.objects.filter(status=1)[:2]
 
@@ -53,13 +56,11 @@ class CommonMixin(object):
             # 'sidebars': sidebars,
             'recently_posts': recently_posts,
             'recently_comments': recently_comments,
-
+            'hot_posts': hot_posts,
         })
         kwargs.update(self.get_catgeory_data())
         kwargs.update(self.get_sidebar_data())
         return super(CommonMixin, self).get_context_data(**kwargs)
-
-
 
 
 class BasePostsView(CommonMixin, ListView):
@@ -86,7 +87,6 @@ class IndexView(BasePostsView):
     def get_context_data(self, **kwargs):
         query = self.request.GET.get('query')
         return super(IndexView, self).get_context_data(query=query)
-
 
 class CategoryView(BasePostsView):
     def get_queryset(self):
@@ -124,7 +124,36 @@ class PostView(CommonMixin, CommentShowMixin, DetailView):
     template_name = 'blog/detail.html'
     context_object_name = 'post'
 
-    #
+    def save(self, *args, **kwargs):
+        if self.is_markdown:
+            self.content = markdown.markdown(self.content, extensions=[
+                'markdown.extensions.extra',
+                'markdown.extensions.codehilite',
+                'markdown.extensions.toc',
+            ])
+        return super(PostView, self).save(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        response = super(PostView, self).get(request, *args, **kwargs)
+        self.pv_uv()
+        return response
+
+    def pv_uv(self):
+        sessionid = self.request.COOKIES.get('sessionid')
+        if not sessionid:
+            return
+
+        pv_key = 'pv:%s:%s' % (sessionid, self.request.path)
+        if not cache.get(pv_key):
+            self.object.increase_pv()
+            cache.set(pv_key, 1, 60)
+
+        uv_key = 'uv:%s:%s' % (sessionid, self.request.path)
+        if not cache.get(uv_key):
+            self.object.increase_uv()
+            cache.set(uv_key, 1, 60*60*24)
+
+
     # def get_comment(self):
     #     target = self.request.path
     #     comments = Comment.objects.filter(target=target)

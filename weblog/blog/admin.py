@@ -19,7 +19,7 @@ class PostAdmin(admin.ModelAdmin):
     '''
     form = PostAdminForm
     list_display = [
-        'title', 'user', 'status', 'category', 'created_time', 'operator'
+        'title', 'user', 'status', 'category', 'pv', 'uv', 'created_time', 'operator'
 
     ]
     search_fields = ['title']
