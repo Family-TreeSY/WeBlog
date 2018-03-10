@@ -27,12 +27,14 @@ class PostAdmin(admin.ModelAdmin):
     actions_on_top = True
     date_hierarchy = 'created_time'
 
-    fields = (('title', 'user'),
-              'status',
-              'category',
-              'tag',
-              'desc',
-              'content')
+    fields = (
+        ('title', 'user'),
+        'status',
+        'category',
+        'tag',
+        'desc',
+        ('content', 'is_markdown')
+    )
 
     def operator(self, obj):
         return format_html(
