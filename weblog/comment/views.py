@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
 from .forms import CommentForm
@@ -21,7 +22,7 @@ class CommentShowMixin(object):
 
 
 class CommentView(TemplateView):
-
+    http_method_names = ['post'] # 请求必须是post，假如是get请求会连接失败
     template_name = 'comment/result.html'
 
     def get(self, request, *args, **kwargs):
@@ -36,6 +37,7 @@ class CommentView(TemplateView):
             instance.target = target
             instance.save()
             succeed = True
+            return redirect(target) # 重定向页面
         else:
             succeed = False
 
