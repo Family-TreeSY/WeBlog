@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-import markdown
+# import markdown
 # from django.shortcuts import render
 # from django.http import Http404
 # from django.core.paginator import Paginator, EmptyPage
@@ -124,14 +124,14 @@ class PostView(CommonMixin, CommentShowMixin, DetailView):
     template_name = 'blog/detail.html'
     context_object_name = 'post'
 
-    def save(self, *args, **kwargs):
-        if self.is_markdown:
-            self.content = markdown.markdown(self.content, extensions=[
-                'markdown.extensions.extra',
-                'markdown.extensions.codehilite',
-                'markdown.extensions.toc',
-            ])
-        return super(PostView, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self.is_markdown:
+    #         self.content = markdown.markdown(self.content, extensions=[
+    #             'markdown.extensions.extra',
+    #             'markdown.extensions.codehilite',
+    #             'markdown.extensions.toc',
+    #         ])
+    #     return super(PostView, self).save(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         response = super(PostView, self).get(request, *args, **kwargs)

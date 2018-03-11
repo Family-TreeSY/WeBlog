@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+import markdown
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import F
@@ -85,15 +86,15 @@ class Post(models.Model):
 
     def increase_uv(self):
         return type(self).objects.filter(id=self.id).update(pv=F('uv') + 1)
-    #
-    # def save(self, *args, **kwargs):
-    #     if self.is_markdown:
-    #         self.content = markdown.markdown(self.content, extensions=[
-    #             'markdown.extensions.extra',
-    #             'markdown.extensions.codehilite',
-    #             'markdown.extensions.toc',
-    #         ])
-    #     return super(Post, self).save(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        if self.is_markdown:
+            self.content = markdown.markdown(self.content, extensions=[
+                'markdown.extensions.extra',
+                'markdown.extensions.codehilite',
+                'markdown.extensions.toc',
+            ])
+        return super(Post, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = verbose_name_plural = '文章'
