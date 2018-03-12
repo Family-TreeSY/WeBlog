@@ -43,7 +43,8 @@ class PostAdmin(BaseOwnerAdmin):
             'title',
             'desc',
             Row('category', 'tag', 'status'),
-            Row('content', 'is_markdown'),
+            'is_markdown',
+            'content',
         ),
     )
     exclude = (

@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'dal',
     'dal_select2',
 
+    'ckeditor',
+
     'xadmin',
     'crispy_forms',
     'reversion',
@@ -136,3 +138,12 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, THEME, 'static'),
 ]
+
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': 900,
+    },
+}
