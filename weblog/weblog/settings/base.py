@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     'comment',
     'config',
 
+    'dal',
+    'dal_select2',
+
     'xadmin',
     'crispy_forms',
     'reversion',
