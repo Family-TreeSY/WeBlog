@@ -17,9 +17,13 @@ import xadmin
 xadmin.autodiscover()
 from xadmin.plugins import xversion
 xversion.register_models()
+from ckeditor_uploader import urls as uploader_urls
+
 from django.conf.urls import url
 # from django.contrib import admin
-
+from ckeditor_uploader import urls as uploader_urls
+from django.conf.urls.static import static
+from django.conf import settings
 # from.custom_site import custom_site
 from config.views import LinkView
 from comment.views import CommentView
@@ -41,5 +45,5 @@ urlpatterns = [
     # url(r'^cus_admin/', custom_site.urls),
     url(r'^category-autocomplete/$', CategoryAutocomplete.as_view(), name='category-autocomplete'),
     url(r'^tag-autocomplete/$', TagAutocomplete.as_view(), name='tag-autocomplete'),
-]
+]+  uploader_urls.urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
