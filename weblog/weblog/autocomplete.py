@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import unicode_literals
+
 from dal import autocomplete
 
 from blog.models import Category, Tag
