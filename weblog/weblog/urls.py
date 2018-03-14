@@ -17,11 +17,13 @@ import xadmin
 xadmin.autodiscover()
 from xadmin.plugins import xversion
 xversion.register_models()
-from ckeditor_uploader import urls as uploader_urls
+
+from rest_framework import routers
+from rest_framework.documentation import include_docs_urls
+# from ckeditor_uploader import urls as uploader_urls
 
 from django.conf.urls import url, include
 # from django.contrib import admin
-# from ckeditor_uploader import urls as uploader_urls
 from django.conf.urls.static import static
 from django.conf import settings
 # from.custom_site import custom_site
@@ -30,7 +32,13 @@ from comment.views import CommentView
 from weblog import adminx # NOQA
 from blog.views import IndexView, CategoryView, TagView, PostView, AuthorView
 from .autocomplete import CategoryAutocomplete, TagAutocomplete
+from blog.api import PostViewSet, CategoryViewSet, TagViewSet, UserViewSet
 
+router = routers.DefaultRouter()
+router.register(r'post', PostViewSet)
+router.register(r'category', CategoryViewSet)
+router.register(r'tag', TagViewSet)
+router.register(r'user', UserViewSet)
 
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
@@ -46,5 +54,7 @@ urlpatterns = [
     url(r'^category-autocomplete/$', CategoryAutocomplete.as_view(), name='category-autocomplete'),
     url(r'^tag-autocomplete/$', TagAutocomplete.as_view(), name='tag-autocomplete'),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+    url(r'^api/docs/', include_docs_urls(title='WeBlog apis')),
+    url(r'^api/', include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
