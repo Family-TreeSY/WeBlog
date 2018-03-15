@@ -34,6 +34,7 @@ from blog.views import IndexView, CategoryView, TagView, PostView, AuthorView
 from .autocomplete import CategoryAutocomplete, TagAutocomplete
 from blog.api import PostViewSet, CategoryViewSet, TagViewSet, UserViewSet
 
+
 router = routers.DefaultRouter()
 router.register(r'post', PostViewSet)
 router.register(r'category', CategoryViewSet)
@@ -58,3 +59,9 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+        url(r'^silk/', include('silk.urls', namespace='silk')),
+    ] + urlpatterns

@@ -5,6 +5,7 @@
 # from django.core.paginator import Paginator, EmptyPage
 from django.core.cache import cache
 from django.views.generic import ListView, DetailView
+from silk.profiling.profiler import silk_profile
 
 from .models import Post, Category, Tag
 from config.models import SideBar
@@ -14,7 +15,8 @@ from comment.views import CommentShowMixin
 
 
 class CommonMixin(object):
-    def get_catgeory_data(self):
+    @silk_profile(name='get_category_context')
+    def get_category_context(self):
         """
         分类
         nav_cates = categories.filter(is_nav=True) 导航分类
@@ -58,7 +60,7 @@ class CommonMixin(object):
             'recently_comments': recently_comments,
             'hot_posts': hot_posts,
         })
-        kwargs.update(self.get_catgeory_data())
+        kwargs.update(self.get_category_context())
         kwargs.update(self.get_sidebar_data())
         return super(CommonMixin, self).get_context_data(**kwargs)
 
