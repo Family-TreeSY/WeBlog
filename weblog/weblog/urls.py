@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+import re
 import xadmin
 xadmin.autodiscover()
 from xadmin.plugins import xversion
@@ -24,7 +25,8 @@ from rest_framework.documentation import include_docs_urls
 
 from django.conf.urls import url, include
 # from django.contrib import admin
-from django.conf.urls.static import static
+# from django.conf.urls.static import static
+from django.views.static import serve
 from django.conf import settings
 # from.custom_site import custom_site
 from config.views import LinkView
@@ -40,6 +42,11 @@ router.register(r'post', PostViewSet)
 router.register(r'category', CategoryViewSet)
 router.register(r'tag', TagViewSet)
 router.register(r'user', UserViewSet)
+
+def static(prefix, **kwargs):
+    return [
+        url(r'^%s(?P<path>.*)$' % re.escape(prefix.lstrip('/')), serve, kwargs=kwargs),
+    ]
 
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
@@ -57,7 +64,7 @@ urlpatterns = [
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^api/docs/', include_docs_urls(title='WeBlog apis')),
     url(r'^api/', include(router.urls)),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar

@@ -3,7 +3,7 @@ import os
 import sys
 
 if __name__ == "__main__":
-    profile = os.environ.get('WEBLOG_PROFILE', 'develop')
+    profile = os.environ.get('WEBLOG_PROFILE', 'product')
     os.environ.setdefault(
         "DJANGO_SETTINGS_MODULE", "weblog.settings.%s" % profile)
     try:

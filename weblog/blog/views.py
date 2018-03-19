@@ -5,7 +5,7 @@
 # from django.core.paginator import Paginator, EmptyPage
 from django.core.cache import cache
 from django.views.generic import ListView, DetailView
-from silk.profiling.profiler import silk_profile
+# from silk.profiling.profiler import silk_profile
 
 from .models import Post, Category, Tag
 from config.models import SideBar
@@ -15,7 +15,7 @@ from comment.views import CommentShowMixin
 
 
 class CommonMixin(object):
-    @silk_profile(name='get_category_context')
+    # @silk_profile(name='get_category_context')
     def get_category_context(self):
         """
         分类
