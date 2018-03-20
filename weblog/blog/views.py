@@ -4,7 +4,7 @@
 # from django.core.paginator import Paginator, EmptyPage
 from django.core.cache import cache
 from django.views.generic import ListView, DetailView
-# from silk.profiling.profiler import silk_profile
+from silk.profiling.profiler import silk_profile
 
 from .models import Post, Category, Tag
 from config.models import SideBar
@@ -27,8 +27,8 @@ def cache_it(func):
     return wrapper
 
 class CommonMixin(object):
-    # @silk_profile(name='get_category_context')
-    @cache_it
+    @silk_profile(name='get_category_context')
+    # @cache_it
     def get_category_context(self):
         """
         分类

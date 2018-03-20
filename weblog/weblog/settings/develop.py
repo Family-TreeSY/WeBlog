@@ -29,6 +29,10 @@ INSTALLED_APPS += [
     'silk',
 ]
 
+DEBUG_TOOLBAR_CONFIG = {
+    'JQUERY_URL': 'https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js',
+}
+
 MIDDLEWARE += [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'silk.middleware.SilkyMiddleware',

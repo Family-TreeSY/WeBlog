@@ -65,11 +65,12 @@ urlpatterns = [
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^api/docs/', include_docs_urls(title='WeBlog apis')),
     url(r'^api/', include(router.urls)),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + \
+              static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [
         url(r'^__debug__/', include(debug_toolbar.urls)),
-        # url(r'^silk/', include('silk.urls', namespace='silk')),
+        url(r'^silk/', include('silk.urls', namespace='silk')),
     ] + urlpatterns
