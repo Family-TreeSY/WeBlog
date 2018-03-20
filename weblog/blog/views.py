@@ -1,5 +1,4 @@
 # -*- coding:utf-8 -*-
-# import markdown
 # from django.shortcuts import render
 # from django.http import Http404
 # from django.core.paginator import Paginator, EmptyPage
@@ -14,8 +13,22 @@ from comment.models import Comment
 from comment.views import CommentShowMixin
 
 
+def cache_it(func):
+    def wrapper(self, *args, **kwargs):
+        key = repr((func.__name__, args, kwargs))
+        result = cache.get(key)
+        if result:
+            print('Hit cache')
+            return result
+        print('Hit db')
+        result = func(self, *args, **kwargs)
+        cache.set(key, result, 60 * 5)
+        return result
+    return wrapper
+
 class CommonMixin(object):
     # @silk_profile(name='get_category_context')
+    @cache_it
     def get_category_context(self):
         """
         分类
@@ -125,15 +138,6 @@ class PostView(CommonMixin, CommentShowMixin, DetailView):
     model = Post
     template_name = 'blog/detail.html'
     context_object_name = 'post'
-
-    # def save(self, *args, **kwargs):
-    #     if self.is_markdown:
-    #         self.content = markdown.markdown(self.content, extensions=[
-    #             'markdown.extensions.extra',
-    #             'markdown.extensions.codehilite',
-    #             'markdown.extensions.toc',
-    #         ])
-    #     return super(PostView, self).save(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         response = super(PostView, self).get(request, *args, **kwargs)

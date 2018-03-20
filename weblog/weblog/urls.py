@@ -28,6 +28,7 @@ from django.conf.urls import url, include
 # from django.conf.urls.static import static
 from django.views.static import serve
 from django.conf import settings
+from django.views.decorators.cache import cache_page
 # from.custom_site import custom_site
 from config.views import LinkView
 from comment.views import CommentView
@@ -50,7 +51,7 @@ def static(prefix, **kwargs):
 
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
-    url(r'^category/(?P<category_id>\d+)/$', CategoryView.as_view(), name='category'),
+    url(r'^category/(?P<category_id>\d+)/$', cache_page(60 * 10)(CategoryView.as_view()), name='category'),
     url(r'^tag/(?P<tag_id>\d+)/$', TagView.as_view(), name='tag'),
     url(r'^post/(?P<pk>\d+)/$', PostView.as_view(), name='detail'),
     url(r'^author/(?P<author_id>\d+)/$', AuthorView.as_view(), name='author'),
@@ -70,5 +71,5 @@ if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [
         url(r'^__debug__/', include(debug_toolbar.urls)),
-        url(r'^silk/', include('silk.urls', namespace='silk')),
+        # url(r'^silk/', include('silk.urls', namespace='silk')),
     ] + urlpatterns
